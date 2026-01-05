@@ -1,0 +1,8 @@
+numpy 
+seaborn
+pandas
+flask
+dvc
+docker
+mlflow
+-e .
