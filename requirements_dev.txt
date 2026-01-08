@@ -12,4 +12,5 @@ black>=22.8.0
 scikit-learn
 mlflow
 apache-airflow
+dotenv
 -e .

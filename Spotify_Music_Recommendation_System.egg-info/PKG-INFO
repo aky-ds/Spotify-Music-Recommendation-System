@@ -4,6 +4,14 @@ Version: 0.1
 Summary: End to End Spotify Music Recommendation System
 Author: Ayazulhaq Yousafzai
 Author-email: www.ayazkhan.com.21@gmail.com
+License: MIT
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
 Requires-Dist: numpy
 Requires-Dist: seaborn
 Requires-Dist: pandas
@@ -18,6 +26,13 @@ Requires-Dist: black>=22.8.0
 Requires-Dist: scikit-learn
 Requires-Dist: mlflow
 Requires-Dist: apache-airflow
+Requires-Dist: dotenv
+Provides-Extra: testing
+Requires-Dist: pytest>=7.1.3; extra == "testing"
+Requires-Dist: mypy>=0.971; extra == "testing"
+Requires-Dist: flake8>=5.0.4; extra == "testing"
+Requires-Dist: tox>=3.25.1; extra == "testing"
+Requires-Dist: black>=22.8.0; extra == "testing"
 Dynamic: author
 Dynamic: author-email
 Dynamic: requires-dist
