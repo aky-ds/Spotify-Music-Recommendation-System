@@ -45,6 +45,7 @@ class DataIngestion:
             os.makedirs(os.path.dirname(self.data_ingest_config.raw_data_path), exist_ok=True)
             df.to_csv(self.data_ingest_config.raw_data_path,index=False)
             logging.info('Raw Data have been created')
+            return df
         except Exception as e:
             raise CustomException(e)
 

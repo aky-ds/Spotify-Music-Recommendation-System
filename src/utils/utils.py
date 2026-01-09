@@ -2,8 +2,8 @@ import os
 import sys
 import dill
 from sentence_transformers import SentenceTransformer
-from src.logger.logging import logging
-from src.exceptions.exception import CustomException
+from src.logger.logger import logging
+from src.exception import CustomException
 
 
 # -----------------------------
@@ -21,7 +21,7 @@ def save_obj(file_path, obj):
         logging.info(f"Object saved successfully at {file_path}")
 
     except Exception as e:
-        raise CustomException(e, sys)
+        raise CustomException(e)
 
 
 # -----------------------------
@@ -40,6 +40,6 @@ def load_obj(file_path):
         return obj
 
     except Exception as e:
-        raise CustomException(e, sys)
+        raise CustomException(e)
 
 
