@@ -1,8 +1,7 @@
 import os
-import sys
-from dataclasses import dataclass
 import numpy as np
 import pandas as pd
+from dataclasses import dataclass
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -10,7 +9,6 @@ from sklearn.impute import SimpleImputer
 
 from sentence_transformers import SentenceTransformer
 
-from src.components.Data_ingestion import DataIngestion
 from src.logger.logger import logging
 from src.exception import CustomException
 from src.utils.utils import save_obj
@@ -24,6 +22,7 @@ class DataTransformationConfig:
     numeric_preprocessor_path: str = os.path.join(
         "artifacts", "numeric_preprocessor.pkl"
     )
+    embedding_model_name: str = "all-MiniLM-L6-v2"
 
 
 # =====================================================
@@ -35,18 +34,16 @@ class DataTransformation:
         logging.info("✅ Data Transformation Initialized")
 
     # -------------------------------------------------
-    # Numeric Preprocessor (PICKLABLE)
+    # Numeric Preprocessor
     # -------------------------------------------------
     def get_numeric_preprocessor(self):
         try:
-            numeric_pipeline = Pipeline(
+            return Pipeline(
                 steps=[
                     ("imputer", SimpleImputer(strategy="median")),
                     ("scaler", StandardScaler())
                 ]
             )
-            return numeric_pipeline
-
         except Exception as e:
             raise CustomException(e)
 
@@ -55,7 +52,7 @@ class DataTransformation:
     # -------------------------------------------------
     def instantiate_data_transformer(self, data: pd.DataFrame):
         try:
-            logging.info("🚀 Starting Data Transformation")
+            logging.info(" Starting Data Transformation")
 
             df = data.copy()
 
@@ -81,15 +78,15 @@ class DataTransformation:
                 "artist_popularity",
                 "artist_followers",
                 "track_duration_min",
-                "album_total_tracks"
+                "album_total_tracks",
             ]
 
-            for col in numeric_features:
-                if col in df.columns:
-                    df[col] = pd.to_numeric(df[col], errors="coerce")
+            df[numeric_features] = df[numeric_features].apply(
+                pd.to_numeric, errors="coerce"
+            )
 
             # -----------------------------
-            # Text Feature Engineering
+            #  FIXED Text Feature Engineering
             # -----------------------------
             df["text_features"] = (
                 df["track_name"].fillna("").astype(str)
@@ -102,31 +99,31 @@ class DataTransformation:
             )
 
             # -----------------------------
-            # Numeric Transformation
+            # Numeric preprocessing
             # -----------------------------
             numeric_preprocessor = self.get_numeric_preprocessor()
             numeric_array = numeric_preprocessor.fit_transform(
                 df[numeric_features]
             )
 
-            # -----------------------------
-            # Save ONLY numeric preprocessor
-            # -----------------------------
             save_obj(
-                file_path=self.config.numeric_preprocessor_path,
-                obj=numeric_preprocessor
+                self.config.numeric_preprocessor_path,
+                numeric_preprocessor
             )
 
-            logging.info("✅ Numeric preprocessor saved successfully")
+            logging.info(" Numeric preprocessor saved")
 
             # -----------------------------
-            # Text Embeddings (NOT pickled)
+            # Text embeddings
             # -----------------------------
-            text_model = SentenceTransformer("all-MiniLM-L6-v2")
+            text_model = SentenceTransformer(
+                self.config.embedding_model_name
+            )
+
             text_embeddings = text_model.encode(
-                df["text_features"].astype(str).tolist(),
+                df["text_features"].tolist(),
                 convert_to_numpy=True,
-                show_progress_bar=False
+                show_progress_bar=False,
             )
 
             # -----------------------------
@@ -134,26 +131,9 @@ class DataTransformation:
             # -----------------------------
             final_array = np.hstack([numeric_array, text_embeddings])
 
-            logging.info(
-                f"✅ Final transformed shape: {final_array.shape}"
-            )
+            logging.info(f"Final training shape: {final_array.shape}")
 
             return final_array
 
         except Exception as e:
             raise CustomException(e)
-
-
-# =====================================================
-# Main Execution
-# =====================================================
-if __name__ == "__main__":
-    data_ingestion = DataIngestion()
-    data_path = data_ingestion.Instantiate_dataingestion()
-
-    df = pd.read_csv('artifacts/raw_data.csv')
-
-    data_transformation = DataTransformation()
-    transformed_data = data_transformation.instantiate_data_transformer(df)
-
-    print("✅ Transformed data shape:", transformed_data.shape)
