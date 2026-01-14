@@ -10,7 +10,7 @@ A **modular Spotify Music Recommendation System** built in Python. This system i
 - **Data Transformation:** Feature engineering, normalization, and preparation for modeling.  
 - **Model Training:** Train recommendation models (content-based or hybrid).  
 - **Model Evaluation:** Evaluate models using metrics to ensure accuracy.  
-- **Testing Pipelines:** Unit and integration tests for robust, error-free execution.  
+- **Prediction Pipelines:** A Complete Pipeline for the recommender.  
 - **Logging & Exception Handling:** Track execution and catch errors gracefully.  
 - **Web Interface:** A simple web interface via `app.py` with HTML templates.  
 - **Docker Support:** Containerized deployment for easy setup.  
@@ -21,7 +21,7 @@ A **modular Spotify Music Recommendation System** built in Python. This system i
 
 ## 🛠 Installation
 
-1. **Clone the repo:**
+1. **Run the following one by one **
 
 ```bash
 git clone https://github.com/aky-ds/Spotify-Music-Recommendation-System.git
@@ -30,6 +30,7 @@ cd Spotify-Music-Recommendation-System
 pip install -r requirements.txt
 
 python app.py
+
 
 
 
