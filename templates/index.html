@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify Music Recommendation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 30px;
+            background: #181818;
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+        input, textarea, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: #1DB954;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1ed760;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎵 Spotify Music Recommendation</h1>
+
+    <form action="{{ url_for('recommend') }}" method="POST">
+
+        <input type="text" name="track_name" placeholder="Track Name" required>
+        <input type="text" name="artist_name" placeholder="Artist Name" required>
+        <input type="text" name="artist_genres" placeholder="Genres (comma separated)" required>
+        <input type="text" name="album_name" placeholder="Album Name" required>
+
+        <input type="number" name="track_popularity" placeholder="Track Popularity (0–100)" required>
+        <input type="number" name="artist_popularity" placeholder="Artist Popularity (0–100)" required>
+        <input type="number" name="artist_followers" placeholder="Artist Followers" required>
+        <input type="number" step="0.1" name="track_duration_min" placeholder="Track Duration (minutes)" required>
+        <input type="number" name="album_total_tracks" placeholder="Album Total Tracks" required>
+
+        <button type="submit">🎧 Get Recommendations</button>
+    </form>
+</div>
+
+</body>
+</html>
