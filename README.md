@@ -33,5 +33,4 @@ python app.py
 
 
 
-## 📁 Project Structure
 
